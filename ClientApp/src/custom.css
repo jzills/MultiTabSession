@@ -1,0 +1,21 @@
+a {
+	color: #0366d6;
+}
+
+code {
+	color: #E01A76;
+}
+
+.btn-primary {
+	color: #fff;
+	background-color: #1b6ec2;
+	border-color: #1861ac;
+}
+
+form div:nth-child(1) {
+	margin-right: 1em;
+}
+
+form > div {
+	padding-bottom: 1em;
+}
