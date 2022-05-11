@@ -1,7 +1,6 @@
 import React from "react"
 
 const SessionDetail = ({data}) => {
-    debugger
     return (
         <React.Fragment>
             <h1>Session Detail</h1>

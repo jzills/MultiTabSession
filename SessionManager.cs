@@ -8,6 +8,8 @@ public interface ISessionManager<TSessionState> where TSessionState : class
 
     Guid AddSession(string sessionId, TSessionState value);
 
+    Guid UpdateSession(string sessionId, TSessionState value);
+
     TSessionState? GetSession(string sessionId);
 
     void RemoveSession(string sessionId);
@@ -43,6 +45,23 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
         _session.SetString(sessionId, sessionJson);
         _session.SetString("_current", sessionJson);
+        return _windowTabId;
+    }
+
+    public Guid UpdateSession(string sessionId, TSessionState value)
+    {
+        if (!Guid.TryParse(sessionId, out var _windowTabId))
+            throw new FormatException("Bad session state key format.");
+
+        var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
+
+        if (!string.IsNullOrEmpty(_session.GetString(sessionId)))
+        {
+            _session.SetString(sessionId, sessionJson);
+            _session.SetString("_current", sessionJson);
+        }
+        else throw new KeyNotFoundException("Session does not exist.");
+        
         return _windowTabId;
     }
 

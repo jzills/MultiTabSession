@@ -17,7 +17,9 @@ const App = () => {
 	}, [])
 
 	return (
-		state.isLoading ? <h1>Loading</h1> : <Session />
+		state.isLoading ? 
+			<h1>Loading</h1> : 
+			<Session />
 	)
 }
 
