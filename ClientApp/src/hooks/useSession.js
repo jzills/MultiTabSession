@@ -13,12 +13,11 @@ const useSession = () => {
 
     const refresh = async () => {
         const session = await getSession()
+        const applicationState = convertToArray(session.applicationState)
+        delete session.applicationState
         setSession({
-            detail: {
-                "id": session.id,
-                "windowName": session.windowName
-            },
-            applicationState: convertToArray(session.applicationState),
+            detail: {...session},
+            applicationState: applicationState,
             isLoading: false
         })
     }

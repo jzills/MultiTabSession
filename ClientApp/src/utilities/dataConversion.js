@@ -4,4 +4,9 @@ const convertToArray = dictionary =>
 const convertToDictionary = array => 
     Object.assign({}, ...array.map(element => ({[element.key]: element.value})))
 
-export { convertToArray, convertToDictionary }
+const convertToWords = string => {
+    let words = string.replace(/([A-Z])/g, " $1")
+    return `${words[0].toUpperCase()}${words.substring(1)}`
+}
+
+export { convertToArray, convertToDictionary, convertToWords }
