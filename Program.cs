@@ -1,4 +1,5 @@
 using MultiTabSession;
+using MultiTabSession.Session;
 
 var builder = WebApplication.CreateBuilder(args);
 

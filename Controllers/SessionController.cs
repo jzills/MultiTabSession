@@ -1,14 +1,14 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using MultiTabSession.Extensions;
+using MultiTabSession.Session;
 
 namespace MultiTabSession.Controllers;
 
 public class SessionController : Controller
 {
-    private readonly ISessionManager<ApplicationSessionState> _sessionManager;
+    private readonly ISessionManager<SessionTab> _sessionManager;
 
-    public SessionController(ISessionManager<ApplicationSessionState> sessionManager) =>
+    public SessionController(ISessionManager<SessionTab> sessionManager) =>
         _sessionManager = sessionManager;
 
     [HttpPost]
@@ -35,7 +35,7 @@ public class SessionController : Controller
             else
             {
                 #pragma warning disable CS8604
-                _sessionManager.AddSession(sessionId, new ApplicationSessionState
+                _sessionManager.AddSession(sessionId, new SessionTab
                 {
                     Id = DateTime.Now.Millisecond,          
                     WindowName = Guid.Parse(sessionId),
@@ -75,16 +75,6 @@ public class SessionController : Controller
 
         return BadRequest();
     }
-
-    // [HttpPost]
-    // public IActionResult UpdateSession(SessionViewModel model)
-    // {
-    //     if (Request.Headers.TryGetSession(out var sessionId))
-    //     {
-    //         var session = _sessionManager.GetSession(sessionId);
-    //         session.ApplicationState = model.ApplicationState;
-    //     }
-    // }
 
     public IActionResult GetSession()
     {

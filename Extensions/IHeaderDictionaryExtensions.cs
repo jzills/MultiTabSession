@@ -1,3 +1,5 @@
+using MultiTabSession.Session;
+
 namespace MultiTabSession.Extensions;
 
 public static class IHeaderDictionaryExtensions

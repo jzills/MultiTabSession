@@ -1,24 +1,13 @@
-import sessionHeaders from "./sessionHeaders"
-
-// window.onload = async () => {
-//     debugger
-//     if (!window.name) {
-//         window.name = await getWindowName()
-//         if (!await addSession())
-//             throw new Error("An error occurred adding session.")
-//     }
-// }
+import { sessionHeaders } from "./sessionHeaders"
 
 async function addSession() {
     const sessionId = sessionStorage.getItem("sessionId")
     const response = await fetch("session/addsession", {
         method: "POST", 
         headers: sessionId ? { 
-            "x-init-session": window.name,
-            "x-from-previous-session": sessionId
-            //[sessionHeaders.initializeSession]: window.name,
-            //[sessionHeaders.fromPreviousSession]: sessionId
-        } : { "x-init-session": window.name }//[sessionHeaders.initializeSession]: window.name }
+            [sessionHeaders.INITIALIZE_SESSION]: window.name,
+            [sessionHeaders.FROM_PREVIOUS_SESSION]: sessionId
+        } : { [sessionHeaders.INITIALIZE_SESSION]: window.name }
     })
 
     response.ok ? 
@@ -40,12 +29,9 @@ async function getWindowName() {
 
 async function getSession() {
     const response = await fetch("session/getsession", {
-        headers: {
-            //[sessionHeaders.session]: window.name
-            "x-session": window.name
-        }
+        headers: { [sessionHeaders.SESSION]: window.name }
     })
-    debugger
+
     return response.ok ? 
         response.json() : 
         console.error(`${response.status}: ${response.statusText}`)

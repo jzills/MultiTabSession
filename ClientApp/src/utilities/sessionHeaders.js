@@ -1,7 +1,7 @@
 const sessionHeaders = Object.freeze({
-    initializeSession: "x-init-session",
-    fromPreviousSession: "x-from-previous-session",
-    session: "x-session"
+    INITIALIZE_SESSION: "x-init-session",
+    FROM_PREVIOUS_SESSION: "x-from-previous-session",
+    SESSION: "x-session"
 })
 
-export default sessionHeaders
+export { sessionHeaders }

@@ -1,4 +1,5 @@
 using MultiTabSession.Extensions;
+using MultiTabSession.Session;
 
 namespace MultiTabSession;
 
@@ -8,7 +9,7 @@ public class RequestSessionMiddleware
 
     public RequestSessionMiddleware(RequestDelegate next) => _next = next;
 
-    public async Task InvokeAsync(HttpContext context, ISessionManager<ApplicationSessionState> sessionManager)
+    public async Task InvokeAsync(HttpContext context, ISessionManager<SessionTab> sessionManager)
     {
         if (context.Request.Headers.TryGetSession(out var sessionId))
         #pragma warning disable CS8604

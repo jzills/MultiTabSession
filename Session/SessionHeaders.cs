@@ -1,4 +1,4 @@
-namespace MultiTabSession;
+namespace MultiTabSession.Session;
 
 public static class SessionHeaders
 {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Session from './components/Session';
-import "./custom.css"
 import { getWindowName, addSession } from './utilities/session';
+import { CircularProgress } from "@material-ui/core"
+import "./custom.css"
 
 const App = () => {
-	const [state, setState] = useState({ isLoading: true })
+	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(async () => {
 		if (!window.name) {
@@ -13,12 +14,12 @@ const App = () => {
 				throw new Error("An error occurred adding session.")
 		}
 
-		setState({ isLoading: false })
+		setIsLoading(false)
 	}, [])
 
 	return (
-		state.isLoading ? 
-			<h1>Loading</h1> : 
+		isLoading ? 
+			<CircularProgress /> : 
 			<Session />
 	)
 }

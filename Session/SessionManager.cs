@@ -1,8 +1,9 @@
 using System.Text.Json;
+using MultiTabSession.Session;
 
-namespace MultiTabSession;
+namespace MultiTabSession.Session;
 
-public interface ISessionManager<TSessionState> where TSessionState : class
+public interface ISessionManager<TSessionState> where TSessionState : SessionBase
 {
     TSessionState? Current { get; }
 
@@ -17,7 +18,7 @@ public interface ISessionManager<TSessionState> where TSessionState : class
     void SetCurrent(string sessionId);
 }
 
-public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : class
+public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : SessionBase
 {
     private readonly IHttpContextAccessor _context;
 
@@ -42,7 +43,12 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
 
+        value.Id = DateTime.Now.Millisecond;
+        value.WindowName = Guid.Parse(sessionId);
+        value.CreatedAt = DateTime.Now;
+
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
+
         _session.SetString(sessionId, sessionJson);
         _session.SetString("_current", sessionJson);
         return _windowTabId;
@@ -52,6 +58,8 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     {
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
+
+        value.ModifiedAt = DateTime.Now;
 
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
 
@@ -79,5 +87,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     public void RemoveSession(string sessionId) => _session.Remove(sessionId);
 
     public void SetCurrent(string sessionId) => 
-        _session.SetString("_current", _session.GetString(sessionId) ?? string.Empty);
+        _session.SetString("_current", 
+            _session.GetString(sessionId) ?? 
+            throw new InvalidDataException("Unable to find the current session."));
 }

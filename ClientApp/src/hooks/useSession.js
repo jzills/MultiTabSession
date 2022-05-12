@@ -1,21 +1,29 @@
-import { getWindowName, addSession } from "../utilities/session"
+import { useState, useEffect } from "react"
+import { getSession } from "../utilities/session"
+import { convertToArray } from "../utilities/dataConversion"
 
 const useSession = () => {  
-    const [state, setState] = useState({
-		windowName: null,
-		isLoading: true
-	})
+    const [session, setSession] = useState({
+        detail: {},
+        applicationState: [],
+        isLoading: true
+    })
 
-	useEffect(async () => {
-		if (!state.windowName) {
-			const windowName = await getWindowName()
-			if (!await addSession())
-				throw new Error("An error occurred adding session.")
+    useEffect(() => refresh(), [])
 
-			setState({
-				windowName: windowName, 
-				isLoading: false
-			})
-		}
-	})
+    const refresh = async () => {
+        const session = await getSession()
+        setSession({
+            detail: {
+                "id": session.id,
+                "windowName": session.windowName
+            },
+            applicationState: convertToArray(session.applicationState),
+            isLoading: false
+        })
+    }
+
+	return [session, refresh]
 }
+
+export default useSession

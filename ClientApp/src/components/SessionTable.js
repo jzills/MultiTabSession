@@ -13,9 +13,9 @@ const SessionTable = ({data, onRowAdd, onRowUpdate, onRowDelete}) => {
                 ]}
                 data={data}
                 editable={{
-                    onRowAdd: onRowAdd,
-                    onRowUpdate: onRowUpdate,
-                    onRowDelete: onRowDelete
+                    onRowAdd: onRowAdd(data),
+                    onRowUpdate: onRowUpdate(data),
+                    onRowDelete: onRowDelete(data)
                 }}
             />
         </div>
