@@ -1,22 +1,6 @@
 using System.Text.Json;
-using MultiTabSession.Session;
 
 namespace MultiTabSession.Session;
-
-public interface ISessionManager<TSessionState> where TSessionState : SessionBase
-{
-    TSessionState? Current { get; }
-
-    Guid AddSession(string sessionId, TSessionState value);
-
-    Guid UpdateSession(string sessionId, TSessionState value);
-
-    TSessionState? GetSession(string sessionId);
-
-    void RemoveSession(string sessionId);
-
-    void SetCurrent(string sessionId);
-}
 
 public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : SessionBase
 {
@@ -82,6 +66,24 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
             _session.GetString(sessionId) ??
             throw new Exception("No session stored for that window tab identifier.")
         );
+    }
+
+    public IEnumerable<TSessionState> GetSessions()
+    {
+        var sessionStates = new List<TSessionState>();
+
+        foreach (var key in _session.Keys)
+        {
+            var value = _session.GetString(key);
+            if (!string.IsNullOrEmpty(value))
+            {
+                var sessionState = JsonSerializer.Deserialize<TSessionState>(value);
+                if (sessionState != null)
+                    sessionStates.Add(sessionState);
+            }
+        }
+
+        return sessionStates;
     }
 
     public void RemoveSession(string sessionId) => _session.Remove(sessionId);

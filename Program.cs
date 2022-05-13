@@ -4,7 +4,7 @@ using MultiTabSession.Session;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(1));
 builder.Services.AddScoped(typeof(ISessionManager<>), typeof(SessionManager<>));
 builder.Services.AddControllersWithViews();
 

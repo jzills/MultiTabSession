@@ -1,8 +1,8 @@
-import { sessionHeaders } from "./sessionHeaders"
+import { sessionHeaders } from "./sessionConstants"
 import { convertToDictionary } from "./dataConversion"
 
 const batch = async applicationState => {
-    const response = await fetch("session/batchupdateapplicationstate", {
+    const response = await fetch("applicationstate", {
         method: "post",
         headers: { 
             "content-type": "application/json",

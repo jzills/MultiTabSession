@@ -4,6 +4,7 @@ using MultiTabSession.Session;
 
 namespace MultiTabSession.Controllers;
 
+[Route("session")]
 public class SessionController : Controller
 {
     private readonly ISessionManager<SessionTab> _sessionManager;
@@ -55,38 +56,14 @@ public class SessionController : Controller
         return BadRequest("Missing required headers.");
     }
 
-    [HttpPost]
-    public IActionResult BatchUpdateApplicationState([FromBody]Dictionary<string, string> applicationState)
-    {
-        if (Request.Headers.TryGetSession(out var sessionId))
-        {
-            #pragma warning disable CS8604
-            var session = _sessionManager.GetSession(sessionId);
-            #pragma warning restore CS8604
+    [HttpGet]
+    public IActionResult GetSession() => Ok(_sessionManager.Current);
 
-            if (session != null)
-            {
-                session.ApplicationState = applicationState;
-                _sessionManager.UpdateSession(sessionId, session);
-            }
+    [HttpGet]
+    [Route("all")]
+    public IActionResult GetSessions() => Ok(_sessionManager.GetSessions());
 
-            return Ok();
-        }
-
-        return BadRequest();
-    }
-
-    public IActionResult GetSession()
-    {
-        if (Request.Headers.TryGetSession(out var sessionId))
-        #pragma warning disable CS8604
-            return Ok(_sessionManager.GetSession(sessionId));
-        #pragma warning restore CS8604
-
-        return BadRequest();
-    }
-
+    [HttpGet]
+    [Route("window")]
     public IActionResult GetWindowName() => Ok(new { WindowName = Guid.NewGuid() });
-
-    public IActionResult VerifySession(string sessionId) => Ok(_sessionManager.GetSession(sessionId));
 }

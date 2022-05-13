@@ -4,6 +4,7 @@ using MultiTabSession.Session;
 
 namespace MultiTabSession.Controllers;
 
+[Route("applicationState")]
 public class ApplicationStateController : Controller
 {
     private readonly ISessionManager<SessionTab> _sessionManager;
