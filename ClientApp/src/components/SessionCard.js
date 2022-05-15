@@ -6,15 +6,17 @@ import Button from '@mui/material/Button';
 import { convertToWords } from "../utilities/dataConversion"
 
 const SessionCard = ({data}) => {
+	const handleClick = () => window.open(window.origin, "_blank")
+
 	return (
-		<Card sx={{ minWidth: 275 }}>
+		<Card sx={{ minWidth: 500 }}>
 			<CardContent>
 			{
                 Object.keys(data).map(key => <div>{convertToWords(key)}: {data[key] ?? "N/A"}</div>)
             }
 			</CardContent>
 			<CardActions>
-				<Button size="small">Learn More</Button>
+				<Button size="small" onClick={handleClick}>Start New Session</Button>
 			</CardActions>
 		</Card>
 	);

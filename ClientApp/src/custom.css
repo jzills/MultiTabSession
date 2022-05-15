@@ -12,10 +12,20 @@ code {
 	border-color: #1861ac;
 }
 
-form div:nth-child(1) {
-	margin-right: 1em;
+h1 {
+	text-align: left;
 }
 
-form > div {
-	padding-bottom: 1em;
+#root {
+	display: flex;
+}
+
+.session-detail {
+	padding: 5%;
+}
+
+.session-table {
+	width: 100%;
+	padding-top: 5%;
+	padding-right: 5%;
 }

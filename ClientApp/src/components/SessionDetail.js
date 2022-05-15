@@ -1,12 +1,20 @@
 import React from "react"
 import SessionCard from "./SessionCard"
+import { Box } from "@material-ui/core"
 
 const SessionDetail = ({data}) => {
     return (
-        <React.Fragment>
+        <div class="session-detail">
             <h1>Session Detail</h1>
-            <SessionCard data={data} />
-        </React.Fragment>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minWidth="200px"
+            >
+                <SessionCard data={data} />
+            </Box> 
+        </div>
     )
 }
 

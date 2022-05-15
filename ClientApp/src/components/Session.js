@@ -1,10 +1,9 @@
 import React from "react"
 import SessionDetail from "./SessionDetail"
 import SessionTable from "./SessionTable"
-import { CircularProgress } from "@material-ui/core"
-import { convertToDictionary } from "../utilities/dataConversion"
 import useSession from "../hooks/useSession"
 import useTable from "../hooks/useTable"
+import Loading from "./Loading"
 
 const Session = () => {
     const [session, refresh] = useSession()
@@ -12,7 +11,7 @@ const Session = () => {
 
     return (
         session.isLoading ? 
-            <CircularProgress /> :
+            <Loading /> :
             <React.Fragment>
                 <SessionDetail data={session.detail} />
                 <SessionTable  
