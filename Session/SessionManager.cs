@@ -15,7 +15,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     {
         get
         {
-            var sessionJson = _session.GetString("_current");
+            var sessionJson = _session.GetString(nameof(Current));
             return !string.IsNullOrEmpty(sessionJson) ? 
                 JsonSerializer.Deserialize<TSessionState>(sessionJson) : 
                 null;
@@ -34,7 +34,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
 
         _session.SetString(sessionId, sessionJson);
-        _session.SetString("_current", sessionJson);
+        _session.SetString(nameof(Current), sessionJson);
         return _windowTabId;
     }
 
@@ -50,7 +50,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         if (!string.IsNullOrEmpty(_session.GetString(sessionId)))
         {
             _session.SetString(sessionId, sessionJson);
-            _session.SetString("_current", sessionJson);
+            _session.SetString(nameof(Current), sessionJson);
         }
         else throw new KeyNotFoundException("Session does not exist.");
         
@@ -72,7 +72,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     {
         var sessionStates = new List<TSessionState>();
 
-        foreach (var key in _session.Keys)
+        foreach (var key in _session.Keys.Where(key => key != nameof(Current)))
         {
             var value = _session.GetString(key);
             if (!string.IsNullOrEmpty(value))
@@ -89,7 +89,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     public void RemoveSession(string sessionId) => _session.Remove(sessionId);
 
     public void SetCurrent(string sessionId) => 
-        _session.SetString("_current", 
+        _session.SetString(nameof(Current), 
             _session.GetString(sessionId) ?? 
             throw new InvalidDataException("Unable to find the current session."));
 }
