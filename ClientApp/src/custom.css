@@ -16,7 +16,7 @@ h1 {
 	text-align: left;
 }
 
-#root {
+.content {
 	display: flex;
 }
 

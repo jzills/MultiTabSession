@@ -5,13 +5,13 @@ const SessionOther = ({data}) => {
     return (
         <List
             sx={{
-                width: '100%',
-                maxWidth: 360,
-                bgcolor: 'background.paper',
-                position: 'relative',
-                overflow: 'auto',
+                width: "100%",
+                maxWidth: "100%",
+                bgcolor: "background.paper",
+                position: "relative",
+                overflow: "auto",
                 maxHeight: 100,
-                '& ul': { padding: 0 },
+                "& ul": { padding: 0 },
             }}
             subheader={<li />}
         >

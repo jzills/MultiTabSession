@@ -1,16 +1,14 @@
 import React from "react"
 import SessionDetail from "./SessionDetail"
 import SessionTable from "./SessionTable"
-import useSession from "../hooks/useSession"
 import useTable from "../hooks/useTable"
 import Loading from "./Loading"
 
-const Session = () => {
-    const [session, refresh] = useSession()
+const Session = ({session, refresh, isLoading}) => {
     const [onRowAdd, onRowUpdate, onRowDelete] = useTable(refresh)
 
     return (
-        session.isLoading ? 
+        isLoading ? 
             <Loading /> :
             <React.Fragment>
                 <SessionDetail data={session.detail} />
