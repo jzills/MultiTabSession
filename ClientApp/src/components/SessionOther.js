@@ -1,8 +1,9 @@
 import { List, ListItem, ListItemText } from "@mui/material"
+import { Paper } from "@mui/material"
 
 const SessionOther = ({data}) => {
-    debugger
     return (
+        <Paper>
         <List
             sx={{
                 width: "100%",
@@ -25,6 +26,7 @@ const SessionOther = ({data}) => {
                     </ListItem>)
             }
         </List>
+        </Paper>
     )
 }
 

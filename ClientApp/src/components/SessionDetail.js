@@ -7,7 +7,7 @@ const SessionDetail = ({data, sessions}) => {
     return (
         <div class="session-detail">
             <div>
-                <h1>Session Detail</h1>
+                <h4>Session Detail</h4>
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -18,7 +18,7 @@ const SessionDetail = ({data, sessions}) => {
                 </Box> 
             </div>
             <div style={{paddingTop: "5%"}}>
-                <h1>Other Sessions</h1>
+                <h4>Other Sessions</h4>
                 <SessionOther data={sessions} />
             </div>
         </div>
