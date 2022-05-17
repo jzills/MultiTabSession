@@ -28,8 +28,6 @@ public class SessionController : Controller
                 var previousSession = _sessionManager.GetSession(previousSessionId);
                 if (previousSession != null)
                 {
-                    previousSession.Id = DateTime.Now.Millisecond;
-                    previousSession.WindowName = Guid.Parse(sessionId);
                     _sessionManager.AddSession(sessionId, previousSession);
                     #pragma warning restore CS8604
                 } 
@@ -43,8 +41,6 @@ public class SessionController : Controller
                 #pragma warning disable CS8604
                 _sessionManager.AddSession(sessionId, new SessionTab
                 {
-                    Id = DateTime.Now.Millisecond,          
-                    WindowName = Guid.Parse(sessionId),
                     ApplicationState = new Dictionary<string, string>
                     {
                         // Current application state values
@@ -54,7 +50,7 @@ public class SessionController : Controller
                 });
                 #pragma warning restore CS8604
             }
-
+ 
             _sessionHub.Clients.All.Notify(_sessionManager.GetSessions());
 
             return RedirectToAction("Index", "Home");

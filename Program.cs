@@ -38,7 +38,7 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}"
 );
 
-app.MapHub<SessionHub>("/hubs/session");
+app.MapHub<SessionHub>("/hubs");
 
 app.MapFallbackToFile("index.html");
 

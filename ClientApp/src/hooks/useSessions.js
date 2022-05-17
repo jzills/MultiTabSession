@@ -33,7 +33,7 @@ const useSessions = () => {
         else throw new Error("No current session found.")
     }
 
-	return [sessions, current, refresh]
+	return [current, sessions, setSessions, refresh]
 }
 
 export default useSessions

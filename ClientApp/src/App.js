@@ -14,9 +14,10 @@ import useConnection from './hooks/useConnection';
 
 const App = () => {
 	const [isLoading, setIsLoading] = useState(true)
-	const [sessions, current, refresh] = useSessions()
+	const [current, sessions, setSessions, refresh] = useSessions()
 	const [onRowAdd, onRowUpdate, onRowDelete] = useTable(refresh)
-	const connection = useConnection((message) => alert(message))
+	
+	useConnection(notifySessions => setSessions(notifySessions))
 
 	useEffect(async () => {
 		if (!window.name) {
