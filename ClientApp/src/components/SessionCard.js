@@ -12,7 +12,7 @@ const SessionCard = ({data}) => {
 		<Card sx={{ minWidth: 500 }}>
 			<CardContent>
 			{
-                Object.keys(data).map(key => <div>{convertToWords(key)}: {data[key] ?? "N/A"}</div>)
+                Object.keys(data).map(key => <div key={key}>{convertToWords(key)}: {data[key] ?? "N/A"}</div>)
             }
 			</CardContent>
 			<CardActions>

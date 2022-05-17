@@ -5,7 +5,7 @@ import SessionOther from "./SessionOther"
 
 const SessionDetail = ({data, sessions}) => {
     return (
-        <div class="session-detail">
+        <div className={"session-detail"}>
             <div>
                 <h4>Session Detail</h4>
                 <Box

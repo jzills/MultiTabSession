@@ -9,11 +9,14 @@ import useTable from './hooks/useTable';
 import SessionDetail from './components/SessionDetail';
 import SessionTable from './components/SessionTable';
 import Header from './components/Header';
+import { HubConnectionBuilder } from "@microsoft/signalr";
+import useConnection from './hooks/useConnection';
 
 const App = () => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [sessions, current, refresh] = useSessions()
 	const [onRowAdd, onRowUpdate, onRowDelete] = useTable(refresh)
+	const connection = useConnection((message) => alert(message))
 
 	useEffect(async () => {
 		if (!window.name) {
@@ -33,7 +36,7 @@ const App = () => {
 			{
 				isLoading ? 
 					<Loading /> : 
-					<div class="content">
+					<div className={"content"}>
 						<SessionDetail data={current.detail} sessions={sessions} />
 						<SessionTable  
 							data={current.applicationState}

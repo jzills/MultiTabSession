@@ -3,7 +3,7 @@ import tableIcons from "../utilities/tableIcons";
 
 const SessionTable = ({data, onRowAdd, onRowUpdate, onRowDelete}) => {
     return (
-        <div class="session-table">
+        <div className={"session-table"}>
             <h4>Session Variables</h4>
             <MaterialTable
                 title={""}

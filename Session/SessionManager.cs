@@ -4,18 +4,27 @@ namespace MultiTabSession.Session;
 
 public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : SessionBase
 {
+    private readonly string _current;
+
     private readonly IHttpContextAccessor _context;
 
     private ISession _session => _context?.HttpContext?.Session ?? 
         throw new BadHttpRequestException("No session configured.");
 
-    public SessionManager(IHttpContextAccessor context) => _context = context;
+    public SessionManager(
+        IHttpContextAccessor context,
+        IConfiguration configuration
+    )
+    {
+        _context = context;
+        _current = configuration["Session:Current"];
+    }
 
     public TSessionState? Current 
     {
         get
         {
-            var sessionJson = _session.GetString(nameof(Current));
+            var sessionJson = _session.GetString(_current);
             return !string.IsNullOrEmpty(sessionJson) ? 
                 JsonSerializer.Deserialize<TSessionState>(sessionJson) : 
                 null;
@@ -27,14 +36,11 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
 
-        value.Id = DateTime.Now.Millisecond;
-        value.WindowName = Guid.Parse(sessionId);
-        value.CreatedAt = DateTime.Now;
-
+        value.Initialize(sessionId);
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
 
         _session.SetString(sessionId, sessionJson);
-        _session.SetString(nameof(Current), sessionJson);
+        _session.SetString(_current, sessionJson);
         return _windowTabId;
     }
 
@@ -44,13 +50,12 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
             throw new FormatException("Bad session state key format.");
 
         value.ModifiedAt = DateTime.Now;
-
         var sessionJson = JsonSerializer.Serialize<TSessionState>(value);
 
         if (!string.IsNullOrEmpty(_session.GetString(sessionId)))
         {
             _session.SetString(sessionId, sessionJson);
-            _session.SetString(nameof(Current), sessionJson);
+            _session.SetString(_current, sessionJson);
         }
         else throw new KeyNotFoundException("Session does not exist.");
         
@@ -71,8 +76,8 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     public IEnumerable<TSessionState> GetSessions()
     {
         var sessionStates = new List<TSessionState>();
-
-        foreach (var key in _session.Keys.Where(key => key != nameof(Current)))
+        
+        foreach (var key in _session.Keys.Where(key => key != _current))
         {
             var value = _session.GetString(key);
             if (!string.IsNullOrEmpty(value))
@@ -89,7 +94,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     public void RemoveSession(string sessionId) => _session.Remove(sessionId);
 
     public void SetCurrent(string sessionId) => 
-        _session.SetString(nameof(Current), 
+        _session.SetString(_current, 
             _session.GetString(sessionId) ?? 
             throw new InvalidDataException("Unable to find the current session."));
 }

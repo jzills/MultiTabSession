@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using MultiTabSession.Extensions;
+using MultiTabSession.Hubs;
 using MultiTabSession.Session;
 
 namespace MultiTabSession.Controllers;
@@ -8,9 +10,12 @@ namespace MultiTabSession.Controllers;
 public class SessionController : Controller
 {
     private readonly ISessionManager<SessionTab> _sessionManager;
+    private readonly IHubContext<SessionHub, ISessionHub> _sessionHub;
 
-    public SessionController(ISessionManager<SessionTab> sessionManager) =>
-        _sessionManager = sessionManager;
+    public SessionController(
+        ISessionManager<SessionTab> sessionManager,
+        IHubContext<SessionHub, ISessionHub> sessionHub
+    ) => (_sessionManager, _sessionHub) = (sessionManager, sessionHub);
 
     [HttpPost]
     public IActionResult AddSession()
@@ -49,6 +54,8 @@ public class SessionController : Controller
                 });
                 #pragma warning restore CS8604
             }
+
+            _sessionHub.Clients.All.Notify(_sessionManager.GetSessions());
 
             return RedirectToAction("Index", "Home");
         }

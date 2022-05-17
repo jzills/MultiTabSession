@@ -6,16 +6,18 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 const context =  [
   "/session",
-  "/applicationstate"
+  "/applicationstate",
+  "/hubs/session"
 ];
 
 module.exports = function(app) {
   const appProxy = createProxyMiddleware(context, {
     target: target,
     secure: false,
-    headers: {
-      Connection: 'Keep-Alive'
-    }
+    ws: true
+    // headers: {
+    //   Connection: 'Keep-Alive'
+    // }
   });
 
   app.use(appProxy);
