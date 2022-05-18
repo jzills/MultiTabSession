@@ -8,9 +8,9 @@ import useConnection from './hooks/useConnection';
 
 const App = () => {
 	const [isLoading, setIsLoading] = useState(true)
-	const [current, sessions, setSessions, refresh] = useSessions()
+	const [current, sessions, setOthers, refresh] = useSessions()
 	
-	useConnection(notifySessions => setSessions(notifySessions))
+	useConnection(notifySessions => setOthers(notifySessions))
 
 	useEffect(async () => {
 		if (!window.name) {

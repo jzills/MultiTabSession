@@ -12,10 +12,12 @@ const useSessions = () => {
 
     useEffect(() => refresh(), [])
 
+    const setOthers = sessions => setSessions(sessions.filter(session => session.windowName !== window.name))
+
     const refresh = async () => {
         const sessions = await getSessions()
         const session = getCurrent(sessions)
-        setSessions(sessions.filter(session => session.windowName !== window.name))
+        setOthers(sessions)
 
         const applicationState = convertToArray(session.applicationState)
         delete session.applicationState
@@ -33,7 +35,7 @@ const useSessions = () => {
         else throw new Error("No current session found.")
     }
 
-	return [current, sessions, setSessions, refresh]
+	return [current, sessions, setOthers, refresh]
 }
 
 export default useSessions

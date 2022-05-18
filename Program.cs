@@ -11,15 +11,14 @@ builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder
-                .WithOrigins("https://localhost:44413/")
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
+    options.AddDefaultPolicy(options =>
+    {
+        options
+            .WithOrigins("https://localhost:44413/")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 var app = builder.Build();
