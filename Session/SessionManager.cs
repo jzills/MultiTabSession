@@ -73,11 +73,14 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         );
     }
 
-    public IEnumerable<TSessionState> GetSessions()
+    public IEnumerable<TSessionState> GetSessions(bool ignoreCurrent = true)
     {
         var sessionStates = new List<TSessionState>();
-        
-        foreach (var key in _session.Keys.Where(key => key != _current))
+        var sessionKeys = ignoreCurrent ?
+            _session.Keys.Where(key => key != _current) : 
+            _session.Keys;
+
+        foreach (var key in sessionKeys)
         {
             var value = _session.GetString(key);
             if (!string.IsNullOrEmpty(value))

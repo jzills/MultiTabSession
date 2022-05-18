@@ -3,24 +3,18 @@ import SessionCard from "./SessionCard"
 import { Box } from "@material-ui/core"
 import SessionOther from "./SessionOther"
 
-const SessionDetail = ({data, sessions}) => {
+const SessionDetail = ({data, header}) => {
     return (
-        <div className={"session-detail"}>
-            <div>
-                <h4>Session Detail</h4>
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    minWidth="200px"
-                >
-                    <SessionCard data={data} />
-                </Box> 
-            </div>
-            <div style={{paddingTop: "5%"}}>
-                <h4>Other Sessions</h4>
-                <SessionOther data={sessions} />
-            </div>
+        <div>
+            <h4>{header}</h4>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minWidth="200px"
+            >
+                <SessionCard data={data} />
+            </Box> 
         </div>
     )
 }

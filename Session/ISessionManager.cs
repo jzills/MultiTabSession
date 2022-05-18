@@ -10,7 +10,7 @@ namespace MultiTabSession.Session
 
         TSessionState? GetSession(string sessionId);
 
-        IEnumerable<TSessionState>? GetSessions();
+        IEnumerable<TSessionState>? GetSessions(bool ignoreCurrent = true);
 
         void RemoveSession(string sessionId);
 

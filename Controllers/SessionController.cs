@@ -24,21 +24,20 @@ public class SessionController : Controller
         {
             if (Request.Headers.TryGetPreviousSession(out var previousSessionId))
             {
-                #pragma warning disable CS8604
+            #pragma warning disable CS8604
+
                 var previousSession = _sessionManager.GetSession(previousSessionId);
                 if (previousSession != null)
-                {
                     _sessionManager.AddSession(sessionId, previousSession);
-                    #pragma warning restore CS8604
-                } 
-                else
-                {
-                    _sessionManager.RemoveSession(previousSessionId);
-                }
+
+            #pragma warning restore CS8604
+
+                else _sessionManager.RemoveSession(previousSessionId);
             } 
             else
             {
-                #pragma warning disable CS8604
+            #pragma warning disable CS8604
+
                 _sessionManager.AddSession(sessionId, new SessionTab
                 {
                     ApplicationState = new Dictionary<string, string>
@@ -48,7 +47,8 @@ public class SessionController : Controller
                         ["AccountId"] = DateTime.Now.Millisecond.ToString()
                     }
                 });
-                #pragma warning restore CS8604
+                
+            #pragma warning restore CS8604
             }
  
             _sessionHub.Clients.All.Notify(_sessionManager.GetSessions());

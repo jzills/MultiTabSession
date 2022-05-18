@@ -1,10 +1,13 @@
 import MaterialTable from "material-table";
 import tableIcons from "../utilities/tableIcons";
+import useTable from "../hooks/useTable";
 
-const SessionTable = ({data, onRowAdd, onRowUpdate, onRowDelete}) => {
+const SessionTable = ({data, header, refresh}) => {
+    const [onRowAdd, onRowUpdate, onRowDelete] = useTable(refresh)
+
     return (
         <div className={"session-table"}>
-            <h4>Session Variables</h4>
+            <h4>{header}</h4>
             <MaterialTable
                 title={""}
                 icons={tableIcons}
