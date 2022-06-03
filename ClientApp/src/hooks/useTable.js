@@ -1,4 +1,4 @@
-import batch from "../utilities/applicationState";
+import batch from "../utilities/applicationState"
 
 const TIMEOUT = 1000
 
@@ -29,7 +29,7 @@ const useTable = refresh => {
 
     const handleTimeout = callback => 
         new Promise((resolve, reject) => {
-            setTimeout(async () => await callback(resolve, reject), TIMEOUT);
+            setTimeout(async () => await callback(resolve, reject), TIMEOUT)
         })
 
     return [onRowAdd, onRowUpdate, onRowDelete]

@@ -1,8 +1,8 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
+import * as React from "react"
+import Card from "@mui/material/Card"
+import CardActions from "@mui/material/CardActions"
+import CardContent from "@mui/material/CardContent"
+import Button from "@mui/material/Button"
 import { convertToWords } from "../utilities/dataConversion"
 
 const SessionCard = ({data}) => {
@@ -19,7 +19,7 @@ const SessionCard = ({data}) => {
 				<Button size="small" onClick={handleClick}>Start New Session</Button>
 			</CardActions>
 		</Card>
-	);
+	)
 }
 
 export default SessionCard

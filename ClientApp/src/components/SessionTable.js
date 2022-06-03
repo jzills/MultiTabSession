@@ -1,6 +1,6 @@
-import MaterialTable from "material-table";
-import tableIcons from "../utilities/tableIcons";
-import useTable from "../hooks/useTable";
+import MaterialTable from "material-table"
+import tableIcons from "../utilities/tableIcons"
+import useTable from "../hooks/useTable"
 
 const SessionTable = ({data, header, refresh}) => {
     const [onRowAdd, onRowUpdate, onRowDelete] = useTable(refresh)

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Session from './components/Session';
-import { getWindowName, addSession } from './utilities/session';
+import React, { useState, useEffect } from "react"
+import Session from "./components/Session"
+import { getWindowName, addSession } from "./utilities/session"
 import useSessions from "./hooks/useSessions"
 import "./custom.css"
-import Header from './components/Header';
-import useConnection from './hooks/useConnection';
+import Header from "./components/Header"
+import useConnection from "./hooks/useConnection"
 
 const App = () => {
 	const [isLoading, setIsLoading] = useState(true)
