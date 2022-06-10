@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react"
-import Session from "./components/Session"
-import { getWindowName, addSession } from "./utilities/session"
-import useSessions from "./hooks/useSessions"
-import "./custom.css"
 import Header from "./components/Header"
+import Session from "./components/Session"
+import useSessions from "./hooks/useSessions"
 import useConnection from "./hooks/useConnection"
+import { getWindowName, addSession } from "./utilities/session"
+import "./custom.css"
 
 const App = () => {
-	const [isLoading, setIsLoading] = useState(true)
 	const [current, sessions, setOthers, refresh] = useSessions()
 	
 	useConnection(notifySessions => setOthers(notifySessions))
@@ -20,8 +19,6 @@ const App = () => {
 
 			refresh()
 		}
-
-		setIsLoading(false)
 	}, [])
 
 	return (
@@ -32,7 +29,6 @@ const App = () => {
 					session={current}
 					sessions={sessions}
 					refresh={refresh}
-					isLoading={isLoading}
 				/>
 			</div>
 		</React.Fragment>

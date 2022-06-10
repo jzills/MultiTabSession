@@ -15,9 +15,7 @@ const useConnection = onNotify => {
 
     useEffect(() => {
 		if (connection) {
-			connection.on("Notify", message => {
-				onNotify(message)
-			})
+			connection.on("Notify", message => onNotify(message))
 			connection.start()
 		}
 	}, [connection])

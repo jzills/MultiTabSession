@@ -3,7 +3,6 @@ import batch from "../utilities/applicationState"
 const TIMEOUT = 1000
 
 const useTable = refresh => {
-
     const onRowAdd = applicationState => data => 
         handleTimeout(handleBatch([...applicationState, data]))
 
@@ -22,15 +21,13 @@ const useTable = refresh => {
         })())
 
     const handleBatch = data => async (resolve, reject) => {
-        if (await batch(data)) {  
-            resolve(await refresh())
-        } else reject()
+        if (await batch(data)) resolve(await refresh())
+        else reject()
     }
 
     const handleTimeout = callback => 
-        new Promise((resolve, reject) => {
-            setTimeout(async () => await callback(resolve, reject), TIMEOUT)
-        })
+        new Promise((resolve, reject) => 
+            setTimeout(async () => await callback(resolve, reject), TIMEOUT))
 
     return [onRowAdd, onRowUpdate, onRowDelete]
 }
