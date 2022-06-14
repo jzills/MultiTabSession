@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { getSessions } from "../utilities/session"
-import { convertToArray } from "../utilities/dataConversion"
+import { getSessions } from "../scripts/session"
+import { convertToArray } from "../scripts/dataConversion"
 
 const useSessions = () => {
     const [sessions, setSessions] = useState([])

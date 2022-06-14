@@ -69,7 +69,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
 
         return JsonSerializer.Deserialize<TSessionState>(
             _session.GetString(sessionId) ??
-            throw new Exception("No session stored for that window tab identifier.")
+            throw new KeyNotFoundException("No session stored for that window tab identifier.")
         );
     }
 
@@ -99,5 +99,5 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
     public void SetCurrent(string sessionId) => 
         _session.SetString(_current, 
             _session.GetString(sessionId) ?? 
-            throw new InvalidDataException("Unable to find the current session."));
+            throw new KeyNotFoundException("Unable to find the current session."));
 }

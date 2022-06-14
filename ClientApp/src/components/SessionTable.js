@@ -1,5 +1,5 @@
 import MaterialTable from "material-table"
-import tableIcons from "../utilities/tableIcons"
+import tableIcons from "../scripts/tableIcons"
 import useTable from "../hooks/useTable"
 
 const SessionTable = ({data, header, refresh}) => {

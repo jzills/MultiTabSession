@@ -1,4 +1,4 @@
-import batch from "../utilities/applicationState"
+import batch from "../scripts/applicationState"
 
 const TIMEOUT = 1000
 
