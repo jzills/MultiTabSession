@@ -232,3 +232,15 @@ _Pvt_Extensions
 .fake/
 
 .vscode
+
+*node_modules
+
+# testing
+*coverage
+
+# production
+*build
+
+# misc
+.DS_Store
+*.env.development.local
