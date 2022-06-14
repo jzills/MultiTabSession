@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace MultiTabSession.Session;
 
 public interface ISessionManager<TSessionState> where TSessionState : SessionBase

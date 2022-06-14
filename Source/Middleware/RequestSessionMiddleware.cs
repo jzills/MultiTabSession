@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using MultiTabSession.Extensions;
 using MultiTabSession.Session;
 
-namespace MultiTabSession;
+namespace MultiTabSession.Middleware;
 
 public class RequestSessionMiddleware
 {

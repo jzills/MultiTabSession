@@ -243,4 +243,5 @@ _Pvt_Extensions
 
 # misc
 .DS_Store
+*.env.development
 *.env.development.local

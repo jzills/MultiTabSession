@@ -1,5 +1,8 @@
-using MultiTabSession;
+using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using MultiTabSession.Hubs;
+using MultiTabSession.Middleware;
 using MultiTabSession.Session;
 
 var builder = WebApplication.CreateBuilder(args);

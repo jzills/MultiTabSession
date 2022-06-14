@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MultiTabSession.Extensions;
 using MultiTabSession.Session;

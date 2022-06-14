@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import Header from "./components/Header"
 import Session from "./components/Session"
 import useSessions from "./hooks/useSessions"
 import useConnection from "./hooks/useConnection"
-import { getWindowName, addSession } from "./utilities/session"
+import { getWindowName, addSession } from "./scripts/session"
 import "./custom.css"
 
 const App = () => {

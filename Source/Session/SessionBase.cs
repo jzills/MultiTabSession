@@ -1,3 +1,5 @@
+using System;
+
 namespace MultiTabSession.Session;
 
 public abstract class SessionBase
