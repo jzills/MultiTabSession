@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MultiTabSession.Extensions;
 using MultiTabSession.Session;
@@ -18,9 +17,9 @@ public class ApplicationStateController : Controller
     {
         if (Request.Headers.TryGetSession(out var sessionId))
         {
-            #pragma warning disable CS8604
+#pragma warning disable CS8604
             var session = _sessionManager.GetSession(sessionId);
-            #pragma warning restore CS8604
+#pragma warning restore CS8604
 
             if (session != null)
             {

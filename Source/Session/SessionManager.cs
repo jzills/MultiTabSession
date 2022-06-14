@@ -9,21 +9,14 @@ namespace MultiTabSession.Session;
 
 public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : SessionBase
 {
-    private readonly string _current;
+    private static readonly string _current = Guid.NewGuid().ToString();
 
     private readonly IHttpContextAccessor _context;
 
     private ISession _session => _context?.HttpContext?.Session ?? 
         throw new BadHttpRequestException("No session configured.");
 
-    public SessionManager(
-        IHttpContextAccessor context,
-        IConfiguration configuration
-    )
-    {
-        _context = context;
-        _current = configuration["Session:Current"];
-    }
+    public SessionManager(IHttpContextAccessor context) => _context = context;
 
     public TSessionState? Current 
     {
