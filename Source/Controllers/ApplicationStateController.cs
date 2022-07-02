@@ -15,7 +15,7 @@ public class ApplicationStateController : Controller
     [HttpPost]
     public IActionResult BatchUpdate([FromBody]Dictionary<string, string> applicationState)
     {
-        if (Request.Headers.TryGetSession(out var sessionId))
+        if (Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
         {
 #pragma warning disable CS8604
             var session = _sessionManager.GetSession(sessionId);

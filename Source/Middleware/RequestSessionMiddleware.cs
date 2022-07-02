@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using MultiTabSession.Extensions;
 using MultiTabSession.Session;
 
@@ -13,7 +11,7 @@ public class RequestSessionMiddleware
 
     public async Task InvokeAsync(HttpContext context, ISessionManager<SessionTab> sessionManager)
     {
-        if (context.Request.Headers.TryGetSession(out var sessionId))
+        if (context.Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
 #pragma warning disable CS8604
             sessionManager.SetCurrent(sessionId);
 #pragma warning restore CS8604

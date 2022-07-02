@@ -1,10 +1,14 @@
 namespace MultiTabSession.Session;
 
-public static class SessionHeaders
+public sealed class SessionHeader
 {
-    public static readonly string InitializeSession = "x-init-session";
+    private readonly string _value;
 
-    public static readonly string FromPreviousSession = "x-from-previous-session";
+    public static readonly SessionHeader InitializeSession = new SessionHeader("x-init-session");
+    public static readonly SessionHeader FromPreviousSession = new SessionHeader("x-from-previous-session");
+    public static readonly SessionHeader Session = new SessionHeader("x-session");
+
+    private SessionHeader(string value) => _value = value;
     
-    public static readonly string Session = "x-session";
+    public static implicit operator string(SessionHeader header) => header._value;
 }

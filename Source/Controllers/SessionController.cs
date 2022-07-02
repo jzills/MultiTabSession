@@ -20,9 +20,9 @@ public class SessionController : Controller
     [HttpPost]
     public IActionResult AddSession()
     {
-        if (Request.Headers.TryGetInitialSession(out var sessionId))
+        if (Request.Headers.TryGetSessionHeader(SessionHeader.InitializeSession, out var sessionId))
         {
-            if (Request.Headers.TryGetPreviousSession(out var previousSessionId))
+            if (Request.Headers.TryGetSessionHeader(SessionHeader.FromPreviousSession, out var previousSessionId))
             {
 #pragma warning disable CS8604
                 var previousSession = _sessionManager.GetSession(previousSessionId);

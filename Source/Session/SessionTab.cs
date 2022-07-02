@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace MultiTabSession.Session;
 
 public class SessionTab : SessionBase
