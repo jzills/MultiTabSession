@@ -10,5 +10,5 @@ public class SessionHub : Hub<ISessionHub>
     public SessionHub(ISessionManager<SessionTab> sessionManager) =>
         _sessionManager = sessionManager;
 
-    public async Task Notify() => await Clients.All.Notify(_sessionManager.GetSessions());
+    public async Task Notify() => await Clients.All.Notify(_sessionManager.Get());
 }

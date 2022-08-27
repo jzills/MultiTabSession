@@ -25,17 +25,17 @@ public class SessionController : Controller
             if (Request.Headers.TryGetSessionHeader(SessionHeader.FromPreviousSession, out var previousSessionId))
             {
 #pragma warning disable CS8604
-                var previousSession = _sessionManager.GetSession(previousSessionId);
+                var previousSession = _sessionManager.Get(previousSessionId);
                 if (previousSession != null)
-                    _sessionManager.AddSession(sessionId, previousSession);
+                    _sessionManager.Add(sessionId, previousSession);
 #pragma warning restore CS8604
 
-                else _sessionManager.RemoveSession(previousSessionId);
+                else _sessionManager.Remove(previousSessionId);
             } 
             else
             {
 #pragma warning disable CS8604
-                _sessionManager.AddSession(sessionId, new SessionTab
+                _sessionManager.Add(sessionId, new SessionTab
                 {
                     ApplicationState = new Dictionary<string, string>
                     {
@@ -47,7 +47,7 @@ public class SessionController : Controller
 #pragma warning restore CS8604
             }
  
-            _sessionHub.Clients.All.Notify(_sessionManager.GetSessions());
+            _sessionHub.Clients.All.Notify(_sessionManager.Get());
 
             return RedirectToAction("Index", "Home");
         }
@@ -60,7 +60,7 @@ public class SessionController : Controller
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetSessions() => Ok(_sessionManager.GetSessions());
+    public IActionResult GetSessions() => Ok(_sessionManager.Get());
 
     [HttpGet]
     [Route("window")]

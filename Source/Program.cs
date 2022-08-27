@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(1));
+builder.Services.AddSingleton<ISessionLocker, SessionLocker>();
 builder.Services.AddScoped(typeof(ISessionManager<>), typeof(SessionManager<>));
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
@@ -33,7 +34,7 @@ app.UseCors();
 app.UseRouting();
 
 app.UseSession();
-app.UseMiddleware<RequestSessionMiddleware>();
+// app.UseMiddleware<RequestSessionMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

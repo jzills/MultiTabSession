@@ -4,15 +4,15 @@ public interface ISessionManager<TSessionState> where TSessionState : SessionBas
 {
     TSessionState? Current { get; }
 
-    Guid AddSession(string sessionId, TSessionState value);
+    Guid Add(string sessionId, TSessionState value);
 
-    Guid UpdateSession(string sessionId, TSessionState value);
+    Guid Update(string sessionId, TSessionState value);
 
-    TSessionState? GetSession(string sessionId);
+    TSessionState? Get(string sessionId);
 
-    IEnumerable<TSessionState>? GetSessions(bool ignoreCurrent = true);
+    IEnumerable<TSessionState>? Get(bool ignoreCurrent = true);
 
-    void RemoveSession(string sessionId);
+    void Remove(string sessionId);
 
     void SetCurrent(string sessionId);
 }

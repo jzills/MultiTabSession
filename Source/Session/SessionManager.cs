@@ -1,30 +1,38 @@
 using System.Text.Json;
+using MultiTabSession.Extensions;
 
 namespace MultiTabSession.Session;
 
 public class SessionManager<TSessionState> : ISessionManager<TSessionState> where TSessionState : SessionBase
 {
+    private static object _locker = new object();
     private static readonly string _current = Guid.NewGuid().ToString();
-
     private readonly IHttpContextAccessor _context;
+    private readonly ISessionLocker _sessionLocker;
 
     private ISession _session => _context?.HttpContext?.Session ?? 
         throw new BadHttpRequestException("No session configured.");
 
-    public SessionManager(IHttpContextAccessor context) => _context = context;
+    public SessionManager(IHttpContextAccessor context, ISessionLocker sessionLocker) => (_context, _sessionLocker) = (context, sessionLocker);
 
     public TSessionState? Current 
     {
         get
         {
-            var sessionJson = _session.GetString(_current);
-            return !string.IsNullOrEmpty(sessionJson) ? 
-                JsonSerializer.Deserialize<TSessionState>(sessionJson) : 
-                null;
+            lock (_locker)
+            {
+                if (_context.HttpContext.Request.Headers
+                    .TryGetSessionHeader(SessionHeader.Session, out var sessionId))
+                {
+                    return Get(sessionId);
+                }
+
+                return null;
+            }
         }
     }
 
-    public Guid AddSession(string sessionId, TSessionState value)
+    public Guid Add(string sessionId, TSessionState value)
     {
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
@@ -37,7 +45,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         return _windowTabId;
     }
 
-    public Guid UpdateSession(string sessionId, TSessionState value)
+    public Guid Update(string sessionId, TSessionState value)
     {
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
@@ -55,7 +63,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         return _windowTabId;
     }
 
-    public TSessionState? GetSession(string sessionId)
+    public TSessionState? Get(string sessionId)
     {
         if (!Guid.TryParse(sessionId, out var _))
             throw new FormatException("Bad session state key format.");
@@ -66,7 +74,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         );
     }
 
-    public IEnumerable<TSessionState> GetSessions(bool ignoreCurrent = true)
+    public IEnumerable<TSessionState> Get(bool ignoreCurrent = true)
     {
         var sessionStates = new List<TSessionState>();
         var sessionKeys = ignoreCurrent ?
@@ -87,7 +95,7 @@ public class SessionManager<TSessionState> : ISessionManager<TSessionState> wher
         return sessionStates;
     }
 
-    public void RemoveSession(string sessionId) => _session.Remove(sessionId);
+    public void Remove(string sessionId) => _session.Remove(sessionId);
 
     public void SetCurrent(string sessionId) => 
         _session.SetString(_current, 
