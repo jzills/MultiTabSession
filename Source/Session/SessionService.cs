@@ -1,4 +1,5 @@
 using System.Text.Json;
+using MultiTabSession.Extensions;
 
 namespace MultiTabSession.Session;
 
@@ -25,8 +26,9 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue> wher
     public Guid Add(string sessionId, TSessionValue value)
     {
         value.Initialize(sessionId);
-        var sessionJson = JsonSerializer.Serialize(value);
-        _session.SetString(sessionId, sessionJson);
+        _session.SetJson(sessionId, value);
+        // var sessionJson = JsonSerializer.Serialize(value);
+        // _session.SetString(sessionId, sessionJson);
         return Guid.Parse(sessionId);
         //return _windowTabId;
     }
@@ -34,14 +36,14 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue> wher
     public Guid Update(string sessionId, TSessionValue value)
     {
         value.ModifiedAt = DateTime.Now;
-        var sessionJson = JsonSerializer.Serialize(value);
-        _session.SetString(sessionId, sessionJson);
+        _session.SetJson(sessionId, value);
+        // var sessionJson = JsonSerializer.Serialize(value);
+        // _session.SetString(sessionId, sessionJson);
         return Guid.Parse(sessionId);
     }
 
     public TSessionValue? Get(string sessionId) => 
-        JsonSerializer.Deserialize<TSessionValue>(
-            _session.GetString(sessionId)!);
+        _session.GetJson<TSessionValue>(sessionId);
 
     public IEnumerable<TSessionValue> Get(bool ignoreCurrent = true)
     {
@@ -53,13 +55,8 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue> wher
 
         foreach (var key in sessionKeys)
         {
-            var value = _session.GetString(key);
-            if (!string.IsNullOrEmpty(value))
-            {
-                var sessionState = JsonSerializer.Deserialize<TSessionValue>(value);
-                if (sessionState != null)
-                    sessionStates.Add(sessionState);
-            }
+            var value = _session.GetJson<TSessionValue>(key);
+            sessionStates.Add(value);
         }
 
         return sessionStates;

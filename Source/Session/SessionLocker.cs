@@ -6,13 +6,15 @@ public interface ISessionLocker
     void Add(string sessionId);
     object? Get(string sessionId);
     IEnumerable<string> GetKeys();
+    void Expire(string sessionId);
 }
 
-public class SessionLocker : ISessionLocker, IDisposable
+public class SessionLocker : ISessionLocker
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private Dictionary<string, object> _lockers = new();
-    public SessionLocker(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
+    private readonly Dictionary<string, object> _lockers = new();
+    public SessionLocker(IHttpContextAccessor httpContextAccessor) =>
+        _httpContextAccessor = httpContextAccessor;
 
     public object Current => Get(_httpContextAccessor.HttpContext!.Session.Id)!;
 
@@ -30,8 +32,5 @@ public class SessionLocker : ISessionLocker, IDisposable
 
     public IEnumerable<string> GetKeys() => _lockers.Keys;
 
-    public void Dispose()
-    {
-        
-    }
+    public void Expire(string sessionId) => _lockers.Remove(sessionId);
 }
