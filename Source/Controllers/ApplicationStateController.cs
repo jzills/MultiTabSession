@@ -17,10 +17,7 @@ public class ApplicationStateController : Controller
     {
         if (Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
         {
-#pragma warning disable CS8604
             var session = _sessionManager.Get(sessionId);
-#pragma warning restore CS8604
-
             if (session != null)
             {
                 session.ApplicationState = applicationState;

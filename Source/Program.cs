@@ -1,8 +1,4 @@
-using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using MultiTabSession.Hubs;
-using MultiTabSession.Middleware;
 using MultiTabSession.Session;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +30,6 @@ app.UseCors();
 app.UseRouting();
 
 app.UseSession();
-// app.UseMiddleware<RequestSessionMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

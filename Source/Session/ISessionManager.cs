@@ -1,18 +1,16 @@
 namespace MultiTabSession.Session;
 
-public interface ISessionManager<TSessionState> where TSessionState : SessionBase
+public interface ISessionManager<TSessionValue> where TSessionValue : SessionBase
 {
-    TSessionState? Current { get; }
+    TSessionValue? Current { get; }
 
-    Guid Add(string sessionId, TSessionState value);
+    Guid Add(string sessionId, TSessionValue value);
 
-    Guid Update(string sessionId, TSessionState value);
+    Guid Update(string sessionId, TSessionValue value);
 
-    TSessionState? Get(string sessionId);
+    TSessionValue? Get(string sessionId);
 
-    IEnumerable<TSessionState>? Get(bool ignoreCurrent = true);
+    IEnumerable<TSessionValue>? Get(bool ignoreCurrent = true);
 
     void Remove(string sessionId);
-
-    void SetCurrent(string sessionId);
 }

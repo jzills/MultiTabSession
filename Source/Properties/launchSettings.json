@@ -11,7 +11,7 @@
     "MultiTabSession": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7117;http://localhost:5080",
+      "applicationUrl": "https://localhost:7119;http://localhost:5082",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
