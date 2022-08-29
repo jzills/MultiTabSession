@@ -27,7 +27,7 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue> wher
         if (!Guid.TryParse(sessionId, out var _windowTabId))
             throw new FormatException("Bad session state key format.");
 
-        lock (_sessionLocker.Get(_context.HttpContext!.Session.Id)!)
+        lock (_sessionLocker.Current)
         {
             value.Initialize(sessionId);
             var sessionJson = JsonSerializer.Serialize(value);
@@ -44,9 +44,12 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue> wher
 
         if (!string.IsNullOrEmpty(_session.GetString(sessionId)))
         {
-            value.ModifiedAt = DateTime.Now;
-            var sessionJson = JsonSerializer.Serialize(value);
-            _session.SetString(sessionId, sessionJson);
+            lock (_sessionLocker.Current)
+            {
+                value.ModifiedAt = DateTime.Now;
+                var sessionJson = JsonSerializer.Serialize(value);
+                _session.SetString(sessionId, sessionJson);
+            }
         }
         else throw new KeyNotFoundException("Session does not exist.");
         
@@ -88,5 +91,11 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue> wher
         return sessionStates;
     }
 
-    public void Remove(string sessionId) => _session.Remove(sessionId);
+    public void Remove(string sessionId)
+    {
+        lock (_sessionLocker.Current)
+        {
+            _session.Remove(sessionId);
+        }
+    }
 }

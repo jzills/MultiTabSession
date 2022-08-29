@@ -2,6 +2,7 @@ namespace MultiTabSession.Session;
 
 public interface ISessionLocker
 {
+    object Current { get; }
     void Add(string sessionId);
     object? Get(string sessionId);
     IEnumerable<string> GetKeys();
@@ -9,7 +10,11 @@ public interface ISessionLocker
 
 public class SessionLocker : ISessionLocker, IDisposable
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private Dictionary<string, object> _lockers = new();
+    public SessionLocker(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
+
+    public object Current => Get(_httpContextAccessor.HttpContext!.Session.Id)!;
 
     public void Add(string sessionId)
     {
