@@ -24,11 +24,12 @@ public class SessionController : Controller
         {
             if (Request.Headers.TryGetSessionHeader(SessionHeader.FromPreviousSession, out var previousSessionId))
             {
-                var previousSession = _sessionManager.Get(previousSessionId);
-                if (previousSession != null)
-                    _sessionManager.Add(sessionId, previousSession);
+                _sessionManager.CopyFrom(sessionId, previousSessionId);
+                // var previousSession = _sessionManager.Get(previousSessionId);
+                // if (previousSession != null)
+                //     _sessionManager.Add(sessionId, previousSession);
 
-                else _sessionManager.Remove(previousSessionId);
+                // else _sessionManager.Remove(previousSessionId);
             } 
             else
             {
@@ -43,7 +44,7 @@ public class SessionController : Controller
                 });     
             }
  
-            _sessionHub.Clients.All.Notify(_sessionManager.Get());
+            _sessionHub.Clients.All.Notify(_sessionManager.GetAll());
 
             return RedirectToAction("Index", "Home");
         }
@@ -56,7 +57,7 @@ public class SessionController : Controller
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetSessions() => Ok(_sessionManager.Get());
+    public IActionResult GetSessions() => Ok(_sessionManager.GetAll());
 
     [HttpGet]
     [Route("window")]

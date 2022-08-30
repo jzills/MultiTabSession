@@ -1,101 +1,84 @@
-using System.Text.Json;
-using MultiTabSession.Extensions;
-
 namespace MultiTabSession.Session;
 
-public class SessionManager<TSessionValue> : ISessionManager<TSessionValue> where TSessionValue : SessionBase
-{
-    private readonly IHttpContextAccessor _context;
+public class SessionManager<TSessionValue> : ISessionManager<TSessionValue> 
+    where TSessionValue : SessionBase
+{ 
+    private readonly ISessionService<TSessionValue> _sessionService;
+    private readonly ISessionValidator<TSessionValue> _sessionValidator;
     private readonly ISessionLocker _sessionLocker;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    private ISession _session => _context?.HttpContext?.Session ?? 
-        throw new BadHttpRequestException("No session configured.");
-
-    public SessionManager(IHttpContextAccessor context, ISessionLocker sessionLocker)
+    public SessionManager(
+        ISessionService<TSessionValue> sessionService,
+        ISessionValidator<TSessionValue> sessionValidator,
+        ISessionLocker sessionLocker,
+        IHttpContextAccessor httpContextAccessor
+    )
     {
-        _context = context;
+        _sessionService = sessionService;
+        _sessionValidator = sessionValidator;
         _sessionLocker = sessionLocker;
-        _sessionLocker.Add(context.HttpContext!.Session.Id);
+        _sessionLocker.Add(httpContextAccessor.HttpContext!.Session.Id);
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public TSessionValue? Current => _context.HttpContext!.Request.Headers
-        .TryGetSessionHeader(SessionHeader.Session, out var sessionId) ?
-            Get(sessionId!) : null;
+    public TSessionValue? Current => _sessionService.Get(
+        _httpContextAccessor.HttpContext!.Request.Headers[SessionHeader.Session]);
 
     public Guid Add(string sessionId, TSessionValue value)
     {
-        if (!Guid.TryParse(sessionId, out var _windowTabId))
-            throw new FormatException("Bad session state key format.");
+        _sessionValidator.ValidateKey(sessionId);
+        _sessionValidator.ValidateValue(value);
 
         lock (_sessionLocker.Current)
         {
-            value.Initialize(sessionId);
-            var sessionJson = JsonSerializer.Serialize(value);
-            _session.SetString(sessionId, sessionJson);
+            _sessionService.Add(sessionId, value);
         }
 
-        return _windowTabId;
+        return Guid.Parse(sessionId);
     }
 
     public Guid Update(string sessionId, TSessionValue value)
     {
-        if (!Guid.TryParse(sessionId, out var _windowTabId))
-            throw new FormatException("Bad session state key format.");
+        _sessionValidator.ValidateKey(sessionId);
+        _sessionValidator.ValidateValue(value);
 
-        if (!string.IsNullOrEmpty(_session.GetString(sessionId)))
+        lock (_sessionLocker.Current)
         {
-            lock (_sessionLocker.Current)
-            {
-                value.ModifiedAt = DateTime.Now;
-                var sessionJson = JsonSerializer.Serialize(value);
-                _session.SetString(sessionId, sessionJson);
-            }
+            _sessionService.Update(sessionId, value);
         }
-        else throw new KeyNotFoundException("Session does not exist.");
         
-        return _windowTabId;
+        return Guid.Parse(sessionId);
     }
 
-    public TSessionValue? Get(string sessionId) => 
-        JsonSerializer.Deserialize<TSessionValue>(
-            _session.GetString(sessionId)!);
-    // {
-    //     if (!Guid.TryParse(sessionId, out var _))
-    //         throw new FormatException("Bad session state key format.");
-
-    //     return JsonSerializer.Deserialize<TSessionValue>(
-    //         _session.GetString(sessionId) ??
-    //         throw new KeyNotFoundException("No session stored for that window tab identifier.")
-    //     );
-    // }
-
-    public IEnumerable<TSessionValue> Get(bool ignoreCurrent = true)
+    public TSessionValue CopyFrom(string sessionId, string copyFromSessionId)
     {
-        var sessionStates = new List<TSessionValue>();
-        // var sessionKeys = ignoreCurrent ?
-        //     _session.Keys.Where(key => key != _current) : 
-        //     _session.Keys;
-        var sessionKeys = _session.Keys;
+        _sessionValidator.ValidateKey(sessionId);
+        _sessionValidator.ValidateKey(copyFromSessionId);
 
-        foreach (var key in sessionKeys)
+        lock (_sessionLocker.Current)
         {
-            var value = _session.GetString(key);
-            if (!string.IsNullOrEmpty(value))
-            {
-                var sessionState = JsonSerializer.Deserialize<TSessionValue>(value);
-                if (sessionState != null)
-                    sessionStates.Add(sessionState);
-            }
+            var sessionTab = _sessionService.Get(copyFromSessionId);
+            _sessionService.Add(sessionId, sessionTab!);
+            return sessionTab!;
         }
+    }
 
-        return sessionStates;
+    public IEnumerable<TSessionValue> GetAll() => _sessionService.GetAll();
+
+    public TSessionValue? Get(string sessionId)
+    {
+        _sessionValidator.ValidateKey(sessionId);
+        return _sessionService.Get(sessionId);
     }
 
     public void Remove(string sessionId)
     {
+        _sessionValidator.ValidateKey(sessionId);
+        
         lock (_sessionLocker.Current)
         {
-            _session.Remove(sessionId);
+            _sessionService.Remove(sessionId);
         }
     }
 }

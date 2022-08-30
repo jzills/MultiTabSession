@@ -1,12 +1,7 @@
 namespace MultiTabSession.Session;
 
-public interface ISessionValidator<TSessionValue>
-{
-    bool ValidateKey(string key);
-    bool ValidateValue(TSessionValue value);
-}
-
-public class SessionValidator<TSessionValue> : ISessionValidator<TSessionValue> where TSessionValue : SessionBase
+public class SessionValidator<TSessionValue> : ISessionValidator<TSessionValue> 
+    where TSessionValue : SessionBase
 {
     public bool ValidateKey(string key)
     {

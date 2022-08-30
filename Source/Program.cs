@@ -1,12 +1,14 @@
+using MultiTabSession.Extensions;
 using MultiTabSession.Hubs;
-using MultiTabSession.Session;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromSeconds(10));
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(1));
-builder.Services.AddSingleton<ISessionLocker, SessionLocker>();
-builder.Services.AddScoped(typeof(ISessionManager<>), typeof(SessionManager<>));
+builder.Services.AddSessionManager();
+
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
