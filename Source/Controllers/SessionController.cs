@@ -25,11 +25,6 @@ public class SessionController : Controller
             if (Request.Headers.TryGetSessionHeader(SessionHeader.FromPreviousSession, out var previousSessionId))
             {
                 _sessionManager.CopyFrom(sessionId, previousSessionId);
-                // var previousSession = _sessionManager.Get(previousSessionId);
-                // if (previousSession != null)
-                //     _sessionManager.Add(sessionId, previousSession);
-
-                // else _sessionManager.Remove(previousSessionId);
             } 
             else
             {
