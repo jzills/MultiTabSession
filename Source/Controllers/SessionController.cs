@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using MultiTabSession.Extensions;
-using MultiTabSession.Hubs;
-using MultiTabSession.Session;
+using Source.Extensions;
+using Source.Hubs;
+using Source.Session;
 
-namespace MultiTabSession.Controllers;
+namespace Source.Controllers;
 
 [Route("session")]
 public class SessionController : Controller

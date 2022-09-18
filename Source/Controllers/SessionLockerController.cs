@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MultiTabSession.Session;
+using Source.Session;
 
-namespace MultiTabSession.Controllers;
+namespace Source.Controllers;
 
 [Route("locks")]
 public class SessionLockerController : Controller

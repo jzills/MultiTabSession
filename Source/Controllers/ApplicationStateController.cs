@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using MultiTabSession.Extensions;
-using MultiTabSession.Session;
+using Source.Extensions;
+using Source.Session;
 
-namespace MultiTabSession.Controllers;
+namespace Source.Controllers;
 
 [Route("applicationState")]
 public class ApplicationStateController : Controller

@@ -1,6 +1,6 @@
-using MultiTabSession.Extensions;
+using Source.Extensions;
 
-namespace MultiTabSession.Session;
+namespace Source.Session;
 
 public class SessionService<TSessionValue> : ISessionService<TSessionValue> 
     where TSessionValue : SessionBase

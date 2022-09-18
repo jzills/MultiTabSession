@@ -1,4 +1,4 @@
-namespace MultiTabSession.Session;
+namespace Source.Session;
 
 public interface ISessionLocker
 {

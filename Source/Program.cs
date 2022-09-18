@@ -1,5 +1,5 @@
-using MultiTabSession.Extensions;
-using MultiTabSession.Hubs;
+using Source.Extensions;
+using Source.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

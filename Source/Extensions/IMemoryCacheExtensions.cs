@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace MultiTabSession.Extensions;
+namespace Source.Extensions;
 
 public static class IMemoryCacheExtensions
 {

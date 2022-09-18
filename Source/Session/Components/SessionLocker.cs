@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
-using MultiTabSession.Extensions;
+using Source.Extensions;
 
-namespace MultiTabSession.Session;
+namespace Source.Session;
 
 public class SessionLocker : ISessionLocker
 {

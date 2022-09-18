@@ -1,6 +1,6 @@
-using MultiTabSession.Session;
+using Source.Session;
 
-namespace MultiTabSession.Extensions;
+namespace Source.Extensions;
 
 public static class IHeaderDictionaryExtensions
 {

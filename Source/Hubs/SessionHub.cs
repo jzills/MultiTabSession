@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
-using MultiTabSession.Session;
+using Source.Session;
 
-namespace MultiTabSession.Hubs;
+namespace Source.Hubs;
 
 public class SessionHub : Hub<ISessionHub>
 {

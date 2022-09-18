@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace MultiTabSession.Extensions;
+namespace Source.Extensions;
 
 public static class ISessionExtensions
 {

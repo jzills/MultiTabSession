@@ -1,6 +1,6 @@
-using MultiTabSession.Session;
+using Source.Session;
 
-namespace MultiTabSession.Hubs;
+namespace Source.Hubs;
 
 public interface ISessionHub
 {
