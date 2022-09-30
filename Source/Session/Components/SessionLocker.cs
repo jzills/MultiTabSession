@@ -15,7 +15,21 @@ public class SessionLocker : ISessionLocker
         (_httpContextAccessor, _memoryCache) = 
             (httpContextAccessor, memoryCache);
 
-    public object Current => Get(_httpContextAccessor.HttpContext!.Session.Id)!;
+    public object Current 
+    { 
+        get
+        {
+            var sessionId = _httpContextAccessor.HttpContext!.Session.Id;
+            var locker = Get(sessionId)!;
+            if (locker == null)
+            {
+                Add(sessionId);
+                return Get(sessionId)!;
+            }
+
+            return locker;
+        }
+    }
 
     public void Add(string sessionId)
     {

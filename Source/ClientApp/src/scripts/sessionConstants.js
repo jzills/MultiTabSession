@@ -6,6 +6,7 @@ const sessionHeaders = Object.freeze({
 
 const sessionRoutes = Object.freeze({
     ADD: "session",
+    REMOVE: "session",
     CURRENT: "session",
     ALL: "session/all",
     WINDOW: "session/window"

@@ -18,7 +18,6 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue>
         _sessionService = sessionService;
         _sessionValidator = sessionValidator;
         _sessionLocker = sessionLocker;
-        _sessionLocker.Add(httpContextAccessor.HttpContext!.Session.Id);
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -33,6 +32,16 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue>
         lock (_sessionLocker.Current)
         {
             _sessionService.Add(sessionId, value);
+
+            var sessions = _sessionService.GetAll();
+            var expiredSessions = sessions.Where(session => session.IsExpired()); 
+            if (expiredSessions.Any()) 
+            {
+                foreach (var expiredSession in expiredSessions)
+                {
+                    _sessionService.Remove(expiredSession.WindowName.ToString());
+                }
+            }
         }
 
         return Guid.Parse(sessionId);

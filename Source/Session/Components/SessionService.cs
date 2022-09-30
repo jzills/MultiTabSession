@@ -16,6 +16,7 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue>
         value.WindowName = Guid.Parse(sessionId);
         value.CreatedAt = DateTime.Now;
         value.ModifiedAt = value.CreatedAt;
+        value.ExpiresIn = value.CreatedAt.AddMinutes(1).Ticks;
 
         _session.SetJson(sessionId, value);
         return Guid.Parse(sessionId);

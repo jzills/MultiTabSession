@@ -47,6 +47,18 @@ public class SessionController : Controller
         return BadRequest("Missing required headers.");
     }
 
+    [HttpDelete]
+    public IActionResult RemoveSession()
+    {
+        if (Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
+        {
+            _sessionManager.Remove(sessionId);
+            return Ok("Session removed successfully.");
+        }
+
+        return BadRequest("No session found to remove.");
+    }
+
     [HttpGet]
     public IActionResult GetSession() => Ok(_sessionManager.Current);
 

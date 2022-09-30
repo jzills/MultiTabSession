@@ -17,6 +17,19 @@ async function addSession() {
     return response.ok
 }
 
+async function removeSession() {
+    const sessionId = sessionStorage.getItem("sessionId") || window.name
+    if (sessionId) {
+        const response = await fetch(sessionRoutes.REMOVE, {
+            method: "DELETE", 
+            headers: { [sessionHeaders.SESSION]: sessionId },
+            keepalive: true
+        })
+
+        return response.ok
+    } 
+}
+
 async function getWindowName() {
     const response = await fetch(sessionRoutes.WINDOW)
     if (response.ok) {
@@ -45,4 +58,4 @@ async function getSessions() {
         console.error(`${response.status}: ${response.statusText}`)
 }
 
-export { addSession, getSession, getSessions, getWindowName }
+export { addSession, removeSession, getSession, getSessions, getWindowName }

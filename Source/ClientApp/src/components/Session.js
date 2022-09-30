@@ -2,6 +2,7 @@ import React from "react"
 import SessionDetail from "./SessionDetail"
 import SessionTable from "./SessionTable"
 import SessionOther from "./SessionOther"
+import SessionExpiration from "./SessionExpiration"
 import Loading from "./Loading"
 
 const Session = ({session, sessions, refresh}) =>
