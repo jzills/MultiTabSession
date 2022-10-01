@@ -31,9 +31,9 @@ const App = () => {
 					sessions={sessions}
 					refresh={refresh}
 				/>
-				<SessionExpiration 
+				{/* <SessionExpiration 
 					expiresIn={current.detail.expiresIn}
-				/>
+				/> */}
 			</div>
 		</React.Fragment>
 	)
