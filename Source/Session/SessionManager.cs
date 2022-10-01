@@ -21,8 +21,27 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue>
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public TSessionValue? Current => _sessionService.Get(
-        _httpContextAccessor.HttpContext!.Request.Headers[SessionHeader.Session]);
+    public TSessionValue? Current
+    {
+        get 
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null)
+            {
+                if (httpContext.Request.Headers
+                        .TryGetValue(SessionHeader.Session, out var sessionValue))
+                {
+                    var sessionId = sessionValue.First();
+                    if (!string.IsNullOrEmpty(sessionId))
+                    {
+                        return Get(sessionId);
+                    }
+                }
+            }
+
+            return default(TSessionValue?);
+        }
+    }
 
     public Guid Add(string sessionId, TSessionValue value)
     {
@@ -33,13 +52,14 @@ public class SessionManager<TSessionValue> : ISessionManager<TSessionValue>
         {
             _sessionService.Add(sessionId, value);
 
+            // TODO: Continue work on client session expiration
             var sessions = _sessionService.GetAll();
             var expiredSessions = sessions.Where(session => session.IsExpired()); 
             if (expiredSessions.Any()) 
             {
                 foreach (var expiredSession in expiredSessions)
                 {
-                    _sessionService.Remove(expiredSession.WindowName.ToString());
+                    _sessionService.Remove(expiredSession.ClientSessionId.ToString());
                 }
             }
         }

@@ -13,10 +13,9 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue>
     public Guid Add(string sessionId, TSessionValue value)
     {
         value.Id = DateTime.Now.Ticks;
-        value.WindowName = Guid.Parse(sessionId);
+        value.ClientSessionId = Guid.Parse(sessionId);
         value.CreatedAt = DateTime.Now;
         value.ModifiedAt = value.CreatedAt;
-        value.ExpiresIn = value.CreatedAt.AddMinutes(1).Ticks;
 
         _session.SetJson(sessionId, value);
         return Guid.Parse(sessionId);
@@ -30,8 +29,10 @@ public class SessionService<TSessionValue> : ISessionService<TSessionValue>
         return Guid.Parse(sessionId);
     }
 
-    public TSessionValue Get(string sessionId) => 
-        _session.GetJson<TSessionValue>(sessionId);
+    public TSessionValue? Get(string sessionId) =>
+        _session.Keys.Contains(sessionId) ?
+            _session.GetJson<TSessionValue>(sessionId) :
+            default(TSessionValue?);
 
     public IEnumerable<TSessionValue> GetAll()
     {

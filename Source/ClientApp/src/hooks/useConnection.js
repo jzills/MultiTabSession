@@ -1,26 +1,32 @@
 import { useState, useEffect } from "react"
 import { HubConnectionBuilder } from "@microsoft/signalr"
 
-const useConnection = onNotify => {
+const useConnection = (urlBuilder, connectionHandlers) => {
     const [connection, setConnection] = useState(null)
+	const [startConnection, setStartConnection] = useState(false)
 
 	useEffect(() => {
-		const connection = new HubConnectionBuilder()
-			.withUrl("https://localhost:44432/hubs")
-			.withAutomaticReconnect()
-			.build()
+		if (startConnection) {
+			const connection = new HubConnectionBuilder()
+				.withUrl(`${urlBuilder.base}/${urlBuilder.path}?${urlBuilder.query}=${urlBuilder.queryArg}`)
+				.withAutomaticReconnect()
+				.build()
 
-		setConnection(connection)
-	}, [])
+			setConnection(connection)
+		}
+	}, [startConnection])
 
     useEffect(() => {
 		if (connection) {
-			connection.on("Notify", message => onNotify(message))
+			for (const connectionHandler of connectionHandlers) {
+				connectionHandler(connection)
+			}
+
 			connection.start()
 		}
 	}, [connection])
 
-    return connection
+    return [connection, setStartConnection]
 }
 
 export default useConnection

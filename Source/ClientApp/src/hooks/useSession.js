@@ -12,7 +12,6 @@ const useSession = () => {
     useEffect(() => refresh(), [])
 
     const refresh = async () => {
-        debugger;
         const session = await getSession()
         const applicationState = convertToArray(session.applicationState)
         delete session.applicationState

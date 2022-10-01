@@ -3,7 +3,7 @@ import { Paper } from "@mui/material"
 
 const SessionOther = ({data, header}) => 
     <div style={{paddingTop: "5%"}}>
-        <h4>{header}</h4>
+        <h4>{header} ({data.length})</h4>
         <Paper>
             <List
                 sx={{
@@ -19,8 +19,8 @@ const SessionOther = ({data, header}) =>
             >
                 {
                     data && data.length ? data.map(element => (
-                        <ListItem key={element.id}>
-                            <ListItemText primary={element.windowName} />
+                        <ListItem key={element}>
+                            <ListItemText primary={element} />
                         </ListItem>)
                     ) : (<ListItem>
                             <ListItemText primary="No other sessions" />

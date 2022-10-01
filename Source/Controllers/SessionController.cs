@@ -39,7 +39,7 @@ public class SessionController : Controller
                 });     
             }
  
-            _sessionHub.Clients.All.Notify(_sessionManager.GetAll());
+            // _sessionHub.Clients.All.Notify(_sessionManager.GetAll());
 
             return RedirectToAction("Index", "Home");
         }
@@ -68,5 +68,5 @@ public class SessionController : Controller
 
     [HttpGet]
     [Route("window")]
-    public IActionResult GetWindowName() => Ok(new { WindowName = Guid.NewGuid() });
+    public IActionResult GetClientSessionId() => Ok(new { ClientSessionId = Guid.NewGuid() });
 }

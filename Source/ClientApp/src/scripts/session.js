@@ -1,17 +1,17 @@
 import { sessionHeaders, sessionRoutes } from "./sessionConstants"
 
-async function addSession() {
-    const sessionId = sessionStorage.getItem("sessionId")
+async function addSession(initialClientSessionId) {
+    const previousSessionId = sessionStorage.getItem("sessionId")
     const response = await fetch(sessionRoutes.ADD, {
         method: "POST", 
-        headers: sessionId ? { 
-            [sessionHeaders.INITIALIZE_SESSION]: window.name,
-            [sessionHeaders.FROM_PREVIOUS_SESSION]: sessionId
-        } : { [sessionHeaders.INITIALIZE_SESSION]: window.name }
+        headers: previousSessionId ? { 
+            [sessionHeaders.INITIALIZE_SESSION]: initialClientSessionId,
+            [sessionHeaders.FROM_PREVIOUS_SESSION]: previousSessionId
+        } : { [sessionHeaders.INITIALIZE_SESSION]: initialClientSessionId }
     })
 
     response.ok ? 
-        sessionStorage.setItem("sessionId", window.name) : 
+        sessionStorage.setItem("sessionId", initialClientSessionId) : 
         console.error(`${response.status}: ${response.statusText}`)
 
     return response.ok
@@ -30,11 +30,11 @@ async function removeSession() {
     } 
 }
 
-async function getWindowName() {
+async function getClientSessionId() {
     const response = await fetch(sessionRoutes.WINDOW)
     if (response.ok) {
-        const { windowName } = await response.json()
-        return windowName
+        const { clientSessionId } = await response.json()
+        return clientSessionId
     } else {
         console.error(`${response.status}: ${response.statusText}`)
     }
@@ -58,4 +58,4 @@ async function getSessions() {
         console.error(`${response.status}: ${response.statusText}`)
 }
 
-export { addSession, removeSession, getSession, getSessions, getWindowName }
+export { addSession, removeSession, getSession, getSessions, getClientSessionId }

@@ -4,6 +4,7 @@ namespace Source.Hubs;
 
 public interface ISessionHub
 {
-    Task Notify(IEnumerable<SessionTab>? sessionTabs);
+    Task Created(IEnumerable<string> clientSessionIds);
+    Task Removed(string clientSessionId);
     Task Expiration(DateTime expiresIn);
 }

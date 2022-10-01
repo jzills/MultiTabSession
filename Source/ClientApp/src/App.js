@@ -1,21 +1,25 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Header from "./components/Header"
 import Session from "./components/Session"
-import useSessions from "./hooks/useSessions"
-import useConnection from "./hooks/useConnection"
-import { getWindowName, addSession, removeSession } from "./scripts/session"
+import { getClientSessionId, addSession } from "./scripts/session"
 import "./custom.css"
 import SessionExpiration from "./components/SessionExpiration"
+import useSession from "./hooks/useSession"
+import useSessionConnection from "./hooks/useSessionConnection"
 
 const App = () => {
-	const [current, sessions, setOthers, refresh] = useSessions()
-	
-	useConnection(notifySessions => setOthers(notifySessions))
+	const [session, refresh] = useSession()
+	const [otherSessions, setOtherSessions] = useState([])
+
+	useSessionConnection(
+		session.detail.clientSessionId, 
+		setOtherSessions
+	)
 
 	useEffect(async () => {
 		if (!window.name) {
-			window.name = await getWindowName()
-			if (!await addSession())
+			window.name = await getClientSessionId()
+			if (!await addSession(window.name))
 				throw new Error("An error occurred adding session.")
 			
 			refresh()
@@ -27,8 +31,8 @@ const App = () => {
 			<Header />
 			<div className={"content"}>
 				<Session 
-					session={current}
-					sessions={sessions}
+					session={session}
+					sessions={otherSessions}
 					refresh={refresh}
 				/>
 				{/* <SessionExpiration 
