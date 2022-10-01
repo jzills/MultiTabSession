@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.SignalR;
-using Source.Session;
+using Source.Extensions;
 
 namespace Source.Hubs;
 
 public class SessionHub : Hub<ISessionHub>
 {
-    private static readonly Dictionary<string, string> _sessionTabConnections = new Dictionary<string, string>();
-    private readonly ISessionManager<SessionTab> _sessionManager;
+    private readonly IConnectionManager _connectionManager;
 
-    public SessionHub(ISessionManager<SessionTab> sessionManager) =>
-        _sessionManager = sessionManager;
+    public SessionHub(IConnectionManager connectionManager) =>
+        _connectionManager = connectionManager;
 
     public override async Task OnConnectedAsync()
     {
@@ -19,18 +18,17 @@ public class SessionHub : Hub<ISessionHub>
             throw new Exception("No HttpContext configured.");
         }
 
-        if (httpContext.Request.Query
-            .TryGetValue(SessionHeader.Session, out var sessionValue))
+        if (httpContext.Request.Query.TryGetSessionValue(out var sessionId))
         {
-            var sessionId = sessionValue.First();
-            _sessionTabConnections[Context.ConnectionId] = sessionId;
+            _connectionManager.Add(Context.ConnectionId, sessionId);
 
-            var callerSessionTabNotifications = _sessionTabConnections
-                .Where(item => item.Key != Context.ConnectionId)
-                .Select(item => item.Value);
+            await Clients.Caller.OnCreatedAsync(
+                _connectionManager.AllValuesExcept(Context.ConnectionId)
+            );
 
-            await Clients.Caller.Created(callerSessionTabNotifications);
-            await Clients.Others.Created(new[] { sessionId });
+            await Clients.Others.OnCreatedAsync(
+                _connectionManager.ValuesFor(Context.ConnectionId)
+            );
         }
 
         await base.OnConnectedAsync();
@@ -38,10 +36,12 @@ public class SessionHub : Hub<ISessionHub>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        if (_sessionTabConnections
-                .Remove(Context.ConnectionId, out var clientSessionId))
+        if (_connectionManager.Remove(Context.ConnectionId, out var clientSessionId))
         {
-            await Clients.Others.Removed(clientSessionId);
+            if (!string.IsNullOrEmpty(clientSessionId))
+            {
+                await Clients.Others.OnRemovedAsync(clientSessionId);
+            }
         }
 
         await base.OnDisconnectedAsync(exception);

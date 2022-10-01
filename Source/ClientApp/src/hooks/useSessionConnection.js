@@ -7,7 +7,7 @@ const useSessionConnection = (clientSessionId, setOtherSessions) => {
     const [urlBuilder, setUrlBuilder] = useState({
         base: `https://localhost:44432`,
         path: "hubs",
-        query: `${sessionHeaders.SESSION}`,
+        query: sessionHeaders.SESSION,
         queryArg: clientSessionId
     })
 

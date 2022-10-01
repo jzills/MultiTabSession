@@ -15,7 +15,7 @@ public class ApplicationStateController : Controller
     [HttpPost]
     public IActionResult BatchUpdate([FromBody]Dictionary<string, string> applicationState)
     {
-        if (Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
+        if (Request.Headers.TryGetSessionValue(out var sessionId))
         {
             var session = _sessionManager.Get(sessionId);
             if (session != null)

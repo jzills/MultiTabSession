@@ -4,16 +4,14 @@ const handleCreated = (connection, handler) => {
             ...prevOtherSessionIds, 
             ...otherSessionIds
         ])
-
+    
     connection.on("created", message => onCreated(message))
 }
 
 const handleRemoved = (connection, handler) => {
     const onRemoved = otherSessionId => {
         handler(prevOtherSessions => {
-            const index = prevOtherSessions
-                .indexOf(sessionId => sessionId === otherSessionId)
-
+            const index = prevOtherSessions.indexOf(sessionId => sessionId === otherSessionId)
             const tempOtherSessions = [...prevOtherSessions]
             tempOtherSessions.splice(index, 1)
             return tempOtherSessions

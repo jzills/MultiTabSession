@@ -4,19 +4,43 @@ namespace Source.Extensions;
 
 public static class IHeaderDictionaryExtensions
 {
-    public static bool TryGetSessionHeader(
+    public static bool TryGetInitialSessionValue(
         this IHeaderDictionary source, 
-        SessionHeader header, 
-        out string sessionId
+        out string sessionId) =>
+            source.TryGetFirstValue(
+                SessionHeader.InitializeSession, 
+                out sessionId
+            );
+
+    public static bool TryGetPreviousSessionValue(
+        this IHeaderDictionary source, 
+        out string sessionId) =>
+            source.TryGetFirstValue(
+                SessionHeader.FromPreviousSession, 
+                out sessionId
+            );
+
+    public static bool TryGetSessionValue(
+        this IHeaderDictionary source, 
+        out string sessionId) =>
+            source.TryGetFirstValue(
+                SessionHeader.Session, 
+                out sessionId
+            );
+
+    private static bool TryGetFirstValue(
+        this IHeaderDictionary source, 
+        string key, 
+        out string firstValue
     )
     {
-        if (source.TryGetValue(header, out var value))
+        if (source.TryGetValue(key, out var value))
         {
-            sessionId = value.First();
+            firstValue = value.First();
             return true;
         }
 
-        sessionId = string.Empty;
+        firstValue = string.Empty;
         return false;
     }
 }

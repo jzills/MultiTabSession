@@ -1,15 +1,21 @@
 using Source.Extensions;
 using Source.Hubs;
+using Source.Session;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromSeconds(10));
-builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(1));
+builder.Services.AddMemoryCache(options => options.ExpirationScanFrequency = TimeSpan.FromMinutes(10));
+builder.Services.AddSession(options => 
+{
+    options.Cookie.Name = "SessionManager.Client";
+    options.IdleTimeout = TimeSpan.FromMinutes(SessionConfiguration.SlidingExpirationInMinutes);
+});
 builder.Services.AddSessionManager();
 
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IConnectionManager, ConnectionManager>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
 {

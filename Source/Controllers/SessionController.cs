@@ -20,9 +20,9 @@ public class SessionController : Controller
     [HttpPost]
     public IActionResult AddSession()
     {
-        if (Request.Headers.TryGetSessionHeader(SessionHeader.InitializeSession, out var sessionId))
+        if (Request.Headers.TryGetInitialSessionValue(out var sessionId))
         {
-            if (Request.Headers.TryGetSessionHeader(SessionHeader.FromPreviousSession, out var previousSessionId))
+            if (Request.Headers.TryGetPreviousSessionValue(out var previousSessionId))
             {
                 _sessionManager.CopyFrom(sessionId, previousSessionId);
             } 
@@ -38,8 +38,6 @@ public class SessionController : Controller
                     }
                 });     
             }
- 
-            // _sessionHub.Clients.All.Notify(_sessionManager.GetAll());
 
             return RedirectToAction("Index", "Home");
         }
@@ -50,7 +48,7 @@ public class SessionController : Controller
     [HttpDelete]
     public IActionResult RemoveSession()
     {
-        if (Request.Headers.TryGetSessionHeader(SessionHeader.Session, out var sessionId))
+        if (Request.Headers.TryGetSessionValue(out var sessionId))
         {
             _sessionManager.Remove(sessionId);
             return Ok("Session removed successfully.");
