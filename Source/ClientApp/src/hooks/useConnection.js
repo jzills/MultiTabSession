@@ -8,7 +8,7 @@ const useConnection = (urlBuilder, connectionHandlers) => {
 	useEffect(() => {
 		if (startConnection) {
 			const connection = new HubConnectionBuilder()
-				.withUrl(`${urlBuilder.base}/${urlBuilder.path}?${urlBuilder.query}=${urlBuilder.queryArg}`)
+				.withUrl(urlBuilder.build()/*`${urlBuilder.base}/${urlBuilder.path}?${urlBuilder.query}=${urlBuilder.queryArg}`*/)
 				.withAutomaticReconnect()
 				.build()
 
